@@ -1,0 +1,55 @@
+scenario: 选择你需要使用MPE中的哪个环境(默认值: "simple")
+
+--max-episode-len 每一局游戏的步长 (默认值: 25)
+
+--num-episodes 要训练多少局游戏(默认值: 60000)
+
+--num-adversaries: 环境中的对手智能体数量 (默认值: 0)
+
+--good-policy:环境中 正方智能体使用的算法(默认: "maddpg"; 可选项: { "maddpg", "ddpg"})
+
+--adv-policy: 环境中对手智能体使用的算法(默认: "maddpg"; 可选项: { "maddpg", "ddpg"})
+
+训练参数
+--lr: 学习率 (默认值: 1e-2)
+
+--gamma: 折扣因子(默认值: 0.95)
+
+--batch-size: batch 大小(默认值: 1024)
+
+--num-units: 网络中的神经元个数 (默认值: 64)
+
+数据保存
+--exp-name: 实验名称，用作保存所有结果的文件名 (默认值: None)
+
+--save-dir: 保存中间训练结果和模型的目录 (默认值: "/tmp/policy/")
+
+--save-rate: 多少局游戏保存一次模型(默认值: 1000)
+
+--load-dir: 加载训练状态和模型的目录(默认值: "")
+
+测试
+--restore: 恢复先前存储在 load-dir 中的训练状态（如果没有 load-dir，则在 save-dir 中）
+已提供），并继续训练 (默认值: False)
+
+--display: 在屏幕上显示存储在 load-dir 中的训练策略（如果没有 load-dir，则在 save-dir 中）
+已提供），但不继续训练(默认值: False)
+
+--benchmark: 对保存的策略运行基准评估（也就是会对策略进行测试，评估策略的好坏），将结果保存到“benchmark-dir”文件夹 (默认值: False)
+
+--benchmark-iters: 每经过多少轮迭代进行一次基准测试 (默认值: 100000)
+
+--benchmark-dir: 保存基准数据的目录 (默认值: "./benchmark_files/")
+
+--plots-dir: 保存训练曲线 (默认值: "./learning_curves/")
+
+代码结构
+./experiments/train.py:在 MPE上训练 MADDPG 的代码
+
+./maddpg/trainer/maddpg.py: MADDPG 算法的核心代码
+
+./maddpg/trainer/replay_buffer.py: MADDPG 的replay buffer代码
+
+./maddpg/common/distributions.py: maddpg.py中的分布式
+
+./maddpg/common/tf_util.py: maddpg.py使用的tensorflow部分
