@@ -11,6 +11,9 @@ from numpy.random import default_rng
 #不同阶段  不同速度   不同阶段的话 用类似状态机的转移即可
 #todo 加上到达success的时间
 class Scenario(BaseScenario): #在reset的时候 修改用户比例
+    uav_pos = []
+    
+    
     def make_world(self):
         world = World()
         # set any world properties first
@@ -273,6 +276,11 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
                     rew -= 2
         return rew,only_rew,sum_success
 
+    #函数中传值过来  然后写个函数打印即可
+    def getUavPosition():
+        print("uav_pos:",Scenario.uav_pos)
+        return Scenario.uav_pos
+
     def communication_reward(self, agent, world):  #通信无人机  这里会发生碰撞  这里每个无人机的reward是用户的数组通信速率的加权和  然后无人机有自己的固定带宽  其他的发射功率 信道增益等都是次要的
         # communications are rewarded for collisions with agents
         rew = 0  #这里的reward是某一类整体的reward   但是也可以计算出这个整体中每一个节点的reward值 这需要去计算遗传算法的适应度的
@@ -351,7 +359,9 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             for p in range(world.dim_p):
                 x = abs(adv.state.p_pos[p])
                 rew -= bound(x)
-
+        for adv in communications:
+            print("pos:",adv.state.p_pos)
+            Scenario.uav_pos.append(adv.state.p_pos)
         return rew,whole_rew,success_sum
 
     def observation(self, agent, world):
