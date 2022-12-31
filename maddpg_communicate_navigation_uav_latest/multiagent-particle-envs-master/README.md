@@ -57,27 +57,3 @@ You can create new scenarios by implementing the first 4 functions above (`make_
 | `simple_spread.py` (Cooperative navigation) | N | N | N agents, N landmarks. Agents are rewarded based on how far any agent is from each landmark. Agents are penalized if they collide with other agents. So, agents have to learn to cover all the landmarks while avoiding collisions. |
 | `simple_tag.py` (Predator-prey) | N | Y | Predator-prey environment. Good agents (green) are faster and want to avoid being hit by adversaries (red). Adversaries are slower and want to hit good agents. Obstacles (large black circles) block the way. |
 | `simple_world_comm.py` | Y | Y | Environment seen in the video accompanying the paper. Same as simple_tag, except (1) there is food (small blue balls) that the good agents are rewarded for being near, (2) we now have ‘forests’ that hide agents inside from being seen from outside; (3) there is a ‘leader adversary” that can see the agents at all times, and can communicate with the other adversaries to help coordinate the chase. |
-
-## Paper citation
-
-If you used this environment for your experiments or found it helpful, consider citing the following papers:
-
-Environments in this repo:
-<pre>
-@article{lowe2017multi,
-  title={Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments},
-  author={Lowe, Ryan and Wu, Yi and Tamar, Aviv and Harb, Jean and Abbeel, Pieter and Mordatch, Igor},
-  journal={Neural Information Processing Systems (NIPS)},
-  year={2017}
-}
-</pre>
-
-Original particle world environment:
-<pre>
-@article{mordatch2017emergence,
-  title={Emergence of Grounded Compositional Language in Multi-Agent Populations},
-  author={Mordatch, Igor and Abbeel, Pieter},
-  journal={arXiv preprint arXiv:1703.04908},
-  year={2017}
-}
-</pre>
