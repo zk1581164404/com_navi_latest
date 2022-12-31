@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div align="center">
+    <h2>Flask部署通导模型</h2>
+    <br>
+    <form action="{{ url_for('predict')}}" method="post">
+        <b>输入用户位置参数</b><input type="text" name="housesize" required />
+        <br>
+        <br>
+        <button type="submit">无人机位置部署预测</button>
+    </form>
+    <br>
+    {{ prediction_display_area }}
+</div>
+
+</body>
+</html>
