@@ -25,7 +25,7 @@ def predict():
             f.write(x)                 #将字符串写入文件中
         f.write('\n')
     print(demo.getlist())
-    return render_template('page.html',prediction_display_area='预测价格为：{}'.format(demo.getlist()))
+    return render_template('page.html',prediction_display_area='无人机部署位置为：{}'.format(demo.getlist()))
     # np.savetxt('/root/com_navi_latest/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/input_pos.txt',features_list)
 
 if __name__ == "__main__":
