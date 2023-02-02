@@ -1,0 +1,333 @@
+{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [
+  [],
+  []
+ ],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [
+  [],
+  []
+ ],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [
+  []
+ ],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [
+  []
+ ],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},{
+ "com_thre": 0.1,
+ "pos_thre": 10,
+ "uav_pos": [],
+ "uav_role": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  0
+ ],
+ "uav_to_user": [],
+ "user_com_rate": [],
+ "user_pos_auc": []
+},

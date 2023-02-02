@@ -15,7 +15,7 @@ def parse_args():
     # Environment
     parser.add_argument("--scenario", type=str, default="simple", help="name of the scenario script")
     parser.add_argument("--max-episode-len", type=int, default=25, help="maximum episode length")  #25 - 100
-    parser.add_argument("--num-episodes", type=int, default=60000, help="number of episodes") #60000 - 30000
+    parser.add_argument("--num-episodes", type=int, default=30000, help="number of episodes") #60000 - 30000
     parser.add_argument("--num-adversaries", type=int, default=0, help="number of adversaries")
     parser.add_argument("--good-policy", type=str, default="maddpg", help="policy for good agents")  #这里可以换为ddpg
     parser.add_argument("--adv-policy", type=str, default="maddpg", help="policy of adversaries")
@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument("--save-rate", type=int, default=1000, help="save model once every time this many episodes are completed")
     parser.add_argument("--load-dir", type=str, default="", help="directory in which training state and model are loaded")
     # Evaluation
-    parser.add_argument("--restore", action="store_true", default=False) #change by zk
+    parser.add_argument("--restore", action="store_true", default=True) #change by zk
     parser.add_argument("--display", action="store_true", default=False)
     parser.add_argument("--benchmark", action="store_true", default=False)
     parser.add_argument("--benchmark-iters", type=int, default=100000, help="number of iterations run for benchmarking")
@@ -209,7 +209,7 @@ def train(arglist):
                 # print statement depends on whether or not there are adversaries
                 if num_adversaries == 0:
                     print("steps: {}, episodes: {}, mean episode reward: {}, com_navi_reward: {},time: {}, success:{},save_rate:{}".format(
-                        train_step, len(episode_rewards), 600 + np.mean(episode_rewards[-arglist.save_rate:]) * 0.01, np.sum(episode_com_nai[-arglist.save_rate:])/1000 ,round(time.time()-t_start, 3),np.sum(episode_success_sum[-arglist.save_rate:]),arglist.save_rate))
+                        train_step, len(episode_rewards), np.mean(episode_rewards[-arglist.save_rate:]), np.sum(episode_com_nai[-arglist.save_rate:])/1000 ,round(time.time()-t_start, 3),np.sum(episode_success_sum[-arglist.save_rate:]),arglist.save_rate))
                 else:
                     print("steps: {}, episodes: {}, mean episode reward: {}, agent episode reward: {}, com_navi_reward: {},time: {}".format(
                         train_step, len(episode_rewards), np.mean(episode_rewards[-arglist.save_rate:]),

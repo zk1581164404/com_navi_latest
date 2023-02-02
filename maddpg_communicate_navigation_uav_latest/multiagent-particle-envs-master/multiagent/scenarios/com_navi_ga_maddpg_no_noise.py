@@ -344,10 +344,8 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
                 rew -= bound(x)
         uav_pos_list = []
         for adv in communications:
-            # print("pos:",adv.state.p_pos)
-            # Scenario.uav_pos.append(adv.state.p_pos)
             uav_pos_list.append(adv.state.p_pos)
-        print(uav_pos_list)
+        # print(uav_pos_list)
         # with open("uav_pos.txt","w") as f:                                                                #对于双层列表中的数据
         #     f.writelines(str(uav_pos_list))
         np.savetxt('/root/com_navi_latest/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/uav_pos.txt',uav_pos_list)
