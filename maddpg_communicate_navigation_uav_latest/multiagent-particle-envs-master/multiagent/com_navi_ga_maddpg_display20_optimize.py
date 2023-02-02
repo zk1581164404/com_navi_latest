@@ -121,7 +121,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         # data = json.dumps(new_dict, indent=1,cls=NpEncoder)
         data = json.dumps(new_dict,cls=NpEncoder)
         # print(data)
-        with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/sample.json", 'a+', newline='\n') as f:
+        with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment20.json", 'a+', newline='\n') as f:
             f.write(data)
             f.write(',')
             f.write('\n')
@@ -159,7 +159,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         self.cnt_all += 1
         self.cnt_all %= len(self.location_dict)
         endtime = datetime.datetime.now()
-        with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment_time.csv", 'a+', newline='\n') as f:
+        with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment_time20.csv", 'a+', newline='\n') as f:
             f.write(str((endtime - self.starttime).total_seconds()))
             f.write('\n')
         self.starttime = endtime

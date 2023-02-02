@@ -128,7 +128,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         # data = json.dumps(new_dict, indent=1,cls=NpEncoder)
         data = json.dumps(new_dict,cls=NpEncoder)
         # print(data)
-        # with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/sample.json", 'a+', newline='\n') as f:
+        # with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment20.json", 'a+', newline='\n') as f:
         #     f.write(data)
         #     f.write(',')
         #     f.write('\n')
