@@ -9,6 +9,8 @@ import math
 from numpy.random import default_rng
 import json
 import copy
+import math
+import datetime
 
 #不同阶段  不同速度   不同阶段的话 用类似状态机的转移即可
 #todo 加上到达success的时间
@@ -43,8 +45,8 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
     uav_to_user_com = []  #json类型
     uav_to_user_navi = []
     uav_to_user = []
-    
-    
+    connects = 0
+    starttime = datetime.datetime.now()
     # print(location_dict[0]['user_location'][0])
     def make_world(self):
         world = World()
@@ -56,6 +58,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         num_communicate_user = 14 #推理 训练皆可变
         num_navigate_user = 6
         num_landmarks = num_communicate_user + num_navigate_user
+        self.connects = math.floor(num_communicate_user/num_communications) + 1
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
@@ -101,19 +104,9 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             self.uav_to_user.append(navi)
         self.uav_pos = []
         for com in self.com_uav_pos:
-            temp = com
-            temp[0] *= 250
-            temp[0] += 250
-            temp[1] *= 250
-            temp[1] += 250
-            self.uav_pos.append(temp)
+            self.uav_pos.append(com)
         for navi in self.navi_uav_pos:
-            temp = navi
-            temp[0] *= 250
-            temp[0] += 250
-            temp[1] *= 250
-            temp[1] += 250
-            self.uav_pos.append(temp)
+            self.uav_pos.append(navi)
         
         # print(self.uav_pos)
         new_dict = {
@@ -128,10 +121,10 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         # data = json.dumps(new_dict, indent=1,cls=NpEncoder)
         data = json.dumps(new_dict,cls=NpEncoder)
         # print(data)
-        # with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment20.json", 'a+', newline='\n') as f:
-        #     f.write(data)
-        #     f.write(',')
-        #     f.write('\n')
+        with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment20.json", 'a+', newline='\n') as f:
+            f.write(data)
+            f.write(',')
+            f.write('\n')
         for i, agent in enumerate(world.agents):
             if agent.communication: 
                 agent.color = np.array([0.85, 0.35, 0.35]) #通信无人机  粉色
@@ -165,6 +158,12 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         # print("cnt_all == ",self.cnt_all)
         self.cnt_all += 1
         self.cnt_all %= len(self.location_dict)
+        endtime = datetime.datetime.now()
+        with open("/home/zk/maddpg/com_navi_latest_for_ubuntu/maddpg_communicate_navigation_uav_latest/multiagent-particle-envs-master/multiagent/scenarios/deployment_time20.csv", 'a+', newline='\n') as f:
+            f.write(str((endtime - self.starttime).total_seconds()))
+            f.write('\n')
+        self.starttime = endtime
+        
 
 
     def is_collision(self, agent1, agent2):
@@ -297,6 +296,9 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         self.user_pos_auc = pos_auc
         return abs(sum_crlb)
 
+    def takeSecond(self,elem):
+        return elem[1]
+
     def navigation_reward(self, agent, world):  #导航无人机
         rew = 0
         only_rew = 0
@@ -343,38 +345,41 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             for a in navigations:
                 if self.is_collision(a, agent):
                     rew -= 2
-        
+        #无人机连接的用户  这里每次排序其实影响算法效率了  加个开关
+        adv_dict = {}
+        for uav in navigations:
+            adv_dict[uav] = []
+        for a in navigate_users:
+            uav_dist_tuple = []
+            for adv in navigations:
+                dist_temp = np.sqrt(np.sum(np.square(a.state.p_pos - adv.state.p_pos)))
+                uav_dist_tuple.append((adv,dist_temp))
+            uav_dist_tuple.sort(key = self.takeSecond)
+            adv_dict[uav_dist_tuple[0][0]].append(a)
+            adv_dict[uav_dist_tuple[1][0]].append(a)
+            adv_dict[uav_dist_tuple[2][0]].append(a)  #可变 至少三架无人机
+
         navi_dict = []
-        # navi_uav_pos = []
-        # for adv in navigations:
-        #     navi_uav_pos.append(adv.state.p_pos)
-        # for user in navigate_users:
-        #     dict_temp = {
-        #                     "uav_pos" : navi_uav_pos,
-        #                     "user_pos" : user.state.p_pos
-        #                 }
-        #     navi_dict.append(dict_temp)
-        navi_user_pos = []
         navi_uav_pos_temp = []
-        for user in navigate_users:
-            temp = copy.copy(user.state.p_pos)
-            temp[0] *= 250
-            temp[0] += 250
-            temp[1] *= 250
-            temp[1] += 250
-            navi_user_pos.append(temp)
-            # navi_user_pos.append(user.state.p_pos)
         for uav in navigations:
             t = copy.copy(uav.state.p_pos)
             t[0] *= 250
             t[0] += 250
             t[1] *= 250
             t[1] += 250
-            navi_uav_pos_temp.append(uav.state.p_pos)  #这里统一在reset变化
+            navi_uav_pos_temp.append(t)  #这里统一在reset变化
+            navi_user_pos_temp = []
+            for user in adv_dict[uav]:
+                temp = copy.copy(user.state.p_pos)
+                temp[0] *= 250
+                temp[0] += 250
+                temp[1] *= 250
+                temp[1] += 250
+                navi_user_pos_temp.append(temp)
             # navi_uav_pos_temp.append(uav.state.p_pos)  #这里统一在reset变化
             dict_temp = {
                             "uav_pos" : t,
-                            "user_pos" : navi_user_pos
+                            "user_pos" : navi_user_pos_temp
                         }
             navi_dict.append(dict_temp)
         
@@ -409,7 +414,23 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
                     min_adv = adv
             adv_dict[min_adv].append(a)
         
+        adv_dict_display = {}   #其实这个更合理  试下这个
+        for adv in communications:
+            adv_dict_display[adv] = []
+        for a in communicate_users:
+            uav_dist_tuple = []
+            for adv in communications:
+                dist_temp = np.sqrt(np.sum(np.square(a.state.p_pos - adv.state.p_pos)))
+                uav_dist_tuple.append((adv,dist_temp))
+            uav_dist_tuple.sort(key = self.takeSecond)
+            for tup in uav_dist_tuple:
+                # print(len(adv_dict_display[tup[0]]),self.connects)
+                if len(adv_dict_display[tup[0]]) < self.connects:
+                    adv_dict_display[tup[0]].append(a)
+                    break
+
         com_dict = []
+        uav_pos_temp = []
         for adv in communications:
             temp = copy.copy(adv.state.p_pos)
             temp[0] *= 250
@@ -417,7 +438,8 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             temp[1] *= 250
             temp[1] += 250
             user_pos = []
-            for a in adv_dict[adv]:
+            uav_pos_temp.append(temp)
+            for a in adv_dict_display[adv]:
                 t = copy.copy(a.state.p_pos)
                 t[0] *= 250
                 t[0] += 250
@@ -502,10 +524,6 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             for p in range(world.dim_p):
                 x = abs(adv.state.p_pos[p])
                 rew -= bound(x)
-        uav_pos_temp = []
-        for adv in communications:
-            # print("pos:",adv.state.p_pos)
-            uav_pos_temp.append(adv.state.p_pos)
         self.com_uav_pos = uav_pos_temp
         return rew,whole_rew,success_sum
 
