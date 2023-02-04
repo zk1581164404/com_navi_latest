@@ -39,6 +39,9 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
     com_uav_pos = []
     navi_uav_pos = []
     uav_pos = []
+    com_uav_origin_pos = []
+    navi_uav_origin_pos = []
+    uav_origin_pos = []
     cnt_all = 0
     user_com_rate = []
     user_pos_auc = []
@@ -48,14 +51,28 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
     com_connects = 0
     navi_connnects = 0
     starttime = datetime.datetime.now()
+    sum_agent = 15
+    com_agent_num = 9
+    navi_agent_num = 6
+    
+    uav_roles = []
+    for i in range(0,com_agent_num):
+        uav_roles.append(0)
+    for i in range(0,navi_agent_num):
+        uav_roles.append(1)
+    
+    agent_pre_pos = []
+    for i in range(0,sum_agent):
+        agent_pre_pos.append(np.random.uniform(-0.005, +0.005, 2))
+    
     # print(location_dict[0]['user_location'][0])
     def make_world(self):
         world = World()
         # set any world properties first
         world.dim_c = 2  #是定位维度
-        num_communications = 9
-        num_navigations = 6
-        num_agents = num_communications + num_navigations
+        num_communications = self.com_agent_num
+        num_navigations = self.navi_agent_num
+        num_agents = self.sum_agent
         num_communicate_user = 30 #推理 训练皆可变
         num_navigate_user = 20
         num_landmarks = num_communicate_user + num_navigate_user
@@ -110,12 +127,18 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         for navi in self.navi_uav_pos:
             self.uav_pos.append(navi)
         
+        self.uav_origin_pos = []
+        for com in self.com_uav_origin_pos:
+            self.uav_origin_pos.append(com)
+        for navi in self.navi_uav_origin_pos:
+            self.uav_origin_pos.append(navi)
+
         # print(self.uav_pos)
         new_dict = {
                     "com_thre": 0.1, 
                     "pos_thre": 10,
                     "uav_pos": self.uav_pos,
-                    "uav_role": [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1], 
+                    "uav_role": self.uav_roles, 
                     "uav_to_user": self.uav_to_user,   #这里需要表示为json数组的形式
                     "user_com_rate": self.user_com_rate, 
                     "user_pos_auc": self.user_pos_auc
@@ -141,9 +164,13 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             else:
                 landmark.color = np.array([0.35, 0.85, 0.35]) #通信用户  绿色
         # set random initial states  初始位置
-        for agent in world.agents:
+        for index,agent in enumerate(world.agents):
             # agent.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
-            agent.state.p_pos = np.random.uniform(-0.005, +0.005, world.dim_p)  #初始位置放在原点
+            uav_pos_x = self.agent_pre_pos[index][0]
+            uav_pos_y = self.agent_pre_pos[index][1]
+            uav_pos = [uav_pos_x,uav_pos_y]
+            agent.state.p_pos = np.array(uav_pos)
+            # agent.state.p_pos = np.random.uniform(-0.005, +0.005, world.dim_p)  #初始位置放在原点
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
@@ -152,7 +179,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
                 pos_y = (self.location_dict[int(self.cnt_all)]['user_location'][i][1] - 250) / 250
                 pos = [pos_x,pos_y]
                 # print(np.random.uniform(-0.9, -0.9))
-                landmark.state.p_pos = pos
+                landmark.state.p_pos = np.array(pos)
                 # landmark.state.p_pos = np.random.uniform(-0.9, +0.9, world.dim_p)  #第三维是指生成二维坐标
                 landmark.state.p_vel = np.zeros(world.dim_p)
                 landmark.pre_pos_x = landmark.state.p_pos[0]
@@ -165,6 +192,8 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         #     f.write(str((endtime - self.starttime).total_seconds()))
         #     f.write('\n')
         self.starttime = endtime
+        if len(self.uav_origin_pos) != 0:  #判空 否则可能出错
+            self.agent_pre_pos = self.uav_origin_pos   
         
 
 
@@ -370,6 +399,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
 
         navi_dict = []
         navi_uav_pos_temp = []
+        navi_uav_origin_pos_temp = []
         for uav in navigations:
             t = copy.copy(uav.state.p_pos)
             t[0] *= 250
@@ -377,6 +407,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             t[1] *= 250
             t[1] += 250
             navi_uav_pos_temp.append(t)  #这里统一在reset变化
+            navi_uav_origin_pos_temp.append(uav.state.p_pos)
             navi_user_pos_temp = []
             for user in adv_dict[uav]:
                 temp = copy.copy(user.state.p_pos)
@@ -395,6 +426,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         # print("定位无人机用户关联：",navi_dict)
         self.uav_to_user_navi = navi_dict
         self.navi_uav_pos = navi_uav_pos_temp
+        self.navi_uav_origin_pos = navi_uav_origin_pos_temp
         return rew,only_rew,sum_success
 
     #函数中传值过来  然后写个函数打印即可
@@ -439,6 +471,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
 
         com_dict = []
         uav_pos_temp = []
+        uav_origin_pos_temp = []
         for adv in communications:
             temp = copy.copy(adv.state.p_pos)
             temp[0] *= 250
@@ -447,6 +480,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             temp[1] += 250
             user_pos = []
             uav_pos_temp.append(temp)
+            uav_origin_pos_temp.append(adv.state.p_pos)
             for a in adv_dict_display[adv]:
                 t = copy.copy(a.state.p_pos)
                 t[0] *= 250
@@ -488,8 +522,11 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
                         if(a_adv != adv):
                             dist_list.append(np.sqrt(np.sum(np.square(a.state.p_pos - a_adv.state.p_pos))))
                     x = a.normlizeX
-                    rate = self.getCommunicateRate(dist_cur,dist_list,x) * a.Bs
-                    user_rate_temp.append(rate / 10)
+                    rate = self.getCommunicateRate(dist_cur,dist_list,x) * a.Bs   #uav的总带宽比上连接数量
+                    candidate = rate * self.com_connects/len(adv_dict[adv])
+                    candidate = candidate if candidate >= 1 else random.uniform(1,1.99)
+                    user_rate_temp.append(candidate / 10)
+                    # user_rate_temp.append(rate / 10) #origin
                     sum_Bs += a.Bs
                     sum_rate += rate
                     # print("rate : ",rate)
@@ -533,6 +570,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
                 x = abs(adv.state.p_pos[p])
                 rew -= bound(x)
         self.com_uav_pos = uav_pos_temp
+        self.com_uav_origin_pos = uav_origin_pos_temp
         return rew,whole_rew,success_sum
 
     def observation(self, agent, world):
