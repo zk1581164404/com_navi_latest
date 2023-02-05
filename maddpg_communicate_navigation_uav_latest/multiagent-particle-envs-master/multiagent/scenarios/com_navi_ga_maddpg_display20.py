@@ -406,6 +406,21 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             t[0] += 250
             t[1] *= 250
             t[1] += 250
+            
+            #修复逃逸case
+            if t[0] < 0:
+                t[0] = 5
+                uav.state.p_pos[0] = -0.95
+            if t[1] < 0:
+                t[1] = 5
+                uav.state.p_pos[1] = -0.95
+            if t[0] > 500:
+                t[0] = 495
+                uav.state.p_pos[0] = 0.95
+            if t[1] > 500:
+                t[1] = 495
+                uav.state.p_pos[1] = 0.95
+            
             navi_uav_pos_temp.append(t)  #这里统一在reset变化
             navi_uav_origin_pos_temp.append(uav.state.p_pos)
             navi_user_pos_temp = []
@@ -478,6 +493,21 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             temp[0] += 250
             temp[1] *= 250
             temp[1] += 250
+            
+            #修复逃逸case
+            if temp[0] < 0:
+                temp[0] = 5
+                adv.state.p_pos[0] = -0.95
+            if temp[1] < 0:
+                temp[1] = 5
+                adv.state.p_pos[1] = -0.95
+            if temp[0] > 500:
+                temp[0] = 495
+                adv.state.p_pos[0] = 0.95
+            if temp[1] > 500:
+                temp[1] = 495
+                adv.state.p_pos[1] = 0.95
+                
             user_pos = []
             uav_pos_temp.append(temp)
             uav_origin_pos_temp.append(adv.state.p_pos)

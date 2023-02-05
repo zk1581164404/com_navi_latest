@@ -54,6 +54,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
     sum_agent = 15
     com_agent_num = 9
     navi_agent_num = 6
+    #注意！！！  还要根据上述数量更改用户带宽
     
     uav_roles = []
     for i in range(0,com_agent_num):
@@ -160,7 +161,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         for i, landmark in enumerate(world.landmarks):
             if landmark.communication:
                 landmark.color = np.array([0.25, 0.25, 0.25]) #导航用户 黑色
-                landmark.Bs = random.randint(3,3) #通信用户所需带宽设定 根据研究点一的需求分级获取 可以把形状大小调整为对应带宽需求
+                landmark.Bs = np.random.uniform(2.5,2.5) # 对应无人机 用户数量更改
             else:
                 landmark.color = np.array([0.35, 0.85, 0.35]) #通信用户  绿色
         # set random initial states  初始位置
@@ -169,7 +170,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             uav_pos_x = self.agent_pre_pos[index][0]
             uav_pos_y = self.agent_pre_pos[index][1]
             uav_pos = [uav_pos_x,uav_pos_y]
-            agent.state.p_pos = np.array(uav_pos)
+            agent.state.p_pos = np.array(uav_pos)  #结果可能会返回nan  出现了分母为0  很可能导致无人机静止
             # agent.state.p_pos = np.random.uniform(-0.005, +0.005, world.dim_p)  #初始位置放在原点
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
@@ -406,6 +407,21 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             t[0] += 250
             t[1] *= 250
             t[1] += 250
+            
+            #修复逃逸case
+            if t[0] < 0:
+                t[0] = 5
+                uav.state.p_pos[0] = -0.95
+            if t[1] < 0:
+                t[1] = 5
+                uav.state.p_pos[1] = -0.95
+            if t[0] > 500:
+                t[0] = 495
+                uav.state.p_pos[0] = 0.95
+            if t[1] > 500:
+                t[1] = 495
+                uav.state.p_pos[1] = 0.95
+            
             navi_uav_pos_temp.append(t)  #这里统一在reset变化
             navi_uav_origin_pos_temp.append(uav.state.p_pos)
             navi_user_pos_temp = []
@@ -478,6 +494,21 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             temp[0] += 250
             temp[1] *= 250
             temp[1] += 250
+            
+            #修复逃逸case
+            if temp[0] < 0:
+                temp[0] = 5
+                adv.state.p_pos[0] = -0.95
+            if temp[1] < 0:
+                temp[1] = 5
+                adv.state.p_pos[1] = -0.95
+            if temp[0] > 500:
+                temp[0] = 495
+                adv.state.p_pos[0] = 0.95
+            if temp[1] > 500:
+                temp[1] = 495
+                adv.state.p_pos[1] = 0.95
+            
             user_pos = []
             uav_pos_temp.append(temp)
             uav_origin_pos_temp.append(adv.state.p_pos)
