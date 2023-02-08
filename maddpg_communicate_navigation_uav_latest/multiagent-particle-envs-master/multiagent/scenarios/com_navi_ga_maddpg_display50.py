@@ -170,8 +170,8 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             uav_pos_x = self.agent_pre_pos[index][0]
             uav_pos_y = self.agent_pre_pos[index][1]
             uav_pos = [uav_pos_x,uav_pos_y]
-            agent.state.p_pos = np.array(uav_pos)  #结果可能会返回nan  出现了分母为0  很可能导致无人机静止
-            # agent.state.p_pos = np.random.uniform(-0.005, +0.005, world.dim_p)  #初始位置放在原点
+            # agent.state.p_pos = np.array(uav_pos)  #结果可能会返回nan  出现了分母为0  很可能导致无人机静止  需要注意！ 因此训练时采用下一行
+            agent.state.p_pos = np.random.uniform(-0.005, +0.005, world.dim_p)  #初始位置放在原点  display时调出来
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
@@ -411,16 +411,16 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             #修复逃逸case
             if t[0] < 0:
                 t[0] = 5
-                uav.state.p_pos[0] = -0.95
+                uav.state.p_pos[0] = -np.random.uniform(0.95,0.99)
             if t[1] < 0:
                 t[1] = 5
-                uav.state.p_pos[1] = -0.95
+                uav.state.p_pos[1] = -np.random.uniform(0.95,0.99)
             if t[0] > 500:
                 t[0] = 495
-                uav.state.p_pos[0] = 0.95
+                uav.state.p_pos[0] = np.random.uniform(0.95,0.99)
             if t[1] > 500:
                 t[1] = 495
-                uav.state.p_pos[1] = 0.95
+                uav.state.p_pos[1] = np.random.uniform(0.95,0.99)
             
             navi_uav_pos_temp.append(t)  #这里统一在reset变化
             navi_uav_origin_pos_temp.append(uav.state.p_pos)
@@ -498,16 +498,16 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             #修复逃逸case
             if temp[0] < 0:
                 temp[0] = 5
-                adv.state.p_pos[0] = -0.95
+                adv.state.p_pos[0] = -np.random.uniform(0.95,0.99)
             if temp[1] < 0:
                 temp[1] = 5
-                adv.state.p_pos[1] = -0.95
+                adv.state.p_pos[1] = -np.random.uniform(0.95,0.99)
             if temp[0] > 500:
                 temp[0] = 495
-                adv.state.p_pos[0] = 0.95
+                adv.state.p_pos[0] = np.random.uniform(0.95,0.99)
             if temp[1] > 500:
                 temp[1] = 495
-                adv.state.p_pos[1] = 0.95
+                adv.state.p_pos[1] = np.random.uniform(0.95,0.99)
             
             user_pos = []
             uav_pos_temp.append(temp)
