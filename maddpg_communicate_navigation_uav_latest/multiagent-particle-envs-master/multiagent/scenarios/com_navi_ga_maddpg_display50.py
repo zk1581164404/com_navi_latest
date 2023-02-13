@@ -531,7 +531,7 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         for user in communicate_users:
             dist_com =  sum([np.sqrt(np.sum(np.square(a.state.p_pos - user.state.p_pos))) for a in communications])
             com_max_dist = max(com_max_dist,dist_com)
-            rew -= dist_com
+            rew -= 3 * dist_com
             # dist_com_all += dist_com
         rew -= 4*com_max_dist
         # print(dist_com_all)
