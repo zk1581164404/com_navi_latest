@@ -371,8 +371,8 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
             navi_max_dist = max(dists,navi_max_dist)
             # print("nav_dist:",dists)
             # print("nav_dists : ",dists)
-            rew -= dists  #最主要是来自这的惩罚
-        rew -= 4*navi_max_dist  #优化阈值
+            rew -= 0.5 * dists  #最主要是来自这的惩罚
+        rew -= 10*navi_max_dist  #优化阈值
         if agent.collide:
             for a in navigations:
                 if self.is_collision(a, agent):
@@ -531,9 +531,9 @@ class Scenario(BaseScenario): #在reset的时候 修改用户比例
         for user in communicate_users:
             dist_com =  sum([np.sqrt(np.sum(np.square(a.state.p_pos - user.state.p_pos))) for a in communications])
             com_max_dist = max(com_max_dist,dist_com)
-            rew -= 3 * dist_com
+            rew -= 2 * dist_com
             # dist_com_all += dist_com
-        rew -= 4*com_max_dist
+        rew -= 10*com_max_dist
         # print(dist_com_all)
         #计算一下 每个无人机连接的用户带宽之和  和自己拥有的带宽
         if shape:  # reward can optionally be shaped (decreased reward for increased distance from agents)
